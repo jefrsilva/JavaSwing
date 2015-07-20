@@ -1,14 +1,16 @@
-package modelo;
+package br.com.alura.contas.modelo;
+
+import java.util.Date;
 
 public class ContaAPagar {
 
 	private String categoria;
 	private String descricao;
 	private double valor;
-	private String vencimento;
+	private Date vencimento;
 	
 	public ContaAPagar(String categoria, String descricao, double valor,
-			String vencimento) {
+			Date vencimento) {
 		this.categoria = categoria;
 		this.descricao = descricao;
 		this.valor = valor;
@@ -39,11 +41,11 @@ public class ContaAPagar {
 		this.valor = valor;
 	}
 
-	public String getVencimento() {
+	public Date getVencimento() {
 		return vencimento;
 	}
 
-	public void setVencimento(String vencimento) {
+	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
 	}
 	

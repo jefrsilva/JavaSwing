@@ -1,3 +1,4 @@
+package br.com.alura.contas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,7 +16,7 @@ public class JanelaInicial extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		
-		JLabel rotulo = new JLabel("Olá mundo!");
+		JLabel rotulo = new JLabel("Olï¿½ mundo!");
 		add(rotulo);
 		
 		JButton botaoCadastroCliente = new JButton("Cadastro de clientes");
