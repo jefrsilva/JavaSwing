@@ -1,38 +1,41 @@
 package br.com.alura.contas;
+
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class JanelaInicial extends JFrame {
-	
-	private static final long serialVersionUID = 1L;
 
 	public JanelaInicial() {
-		super("Controle de Contas a Pagar e a Receber");		
+		super("Controle de Contas a Pagar e a Receber");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-		
-		JLabel rotulo = new JLabel("Ol� mundo!");
-		add(rotulo);
-		
-		JButton botaoCadastroCliente = new JButton("Cadastro de clientes");
-		add(botaoCadastroCliente);
-		
-		botaoCadastroCliente.addActionListener(new ActionListener() {
+
+		JPanel painelConteudo = new JPanel();
+		painelConteudo.setLayout(new BoxLayout(painelConteudo,
+				BoxLayout.PAGE_AXIS));
+
+		JButton botaoListaContasAPagar = new JButton("Contas a Pagar");
+		painelConteudo.add(botaoListaContasAPagar, BorderLayout.CENTER);
+
+		botaoListaContasAPagar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				new FormularioContasAPagar().mostra();
+				new ListaContasAPagar().mostra();
 			}
 		});
-		
+
+		setContentPane(painelConteudo);
 		pack();
 	}
-	
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

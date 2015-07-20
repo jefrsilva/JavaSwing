@@ -55,8 +55,8 @@ public class FormularioContasAPagar extends JFrame {
 		botaoInserir.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ContaAPagar conta = getContaAPagar();
 				ContaAPagarDAO dao = new ContaAPagarDAO();
+				ContaAPagar conta = getContaAPagar();
 				dao.insere(conta);
 				dao.fecha();
 			}
@@ -155,11 +155,11 @@ public class FormularioContasAPagar extends JFrame {
 	}
 
 	public ContaAPagar getContaAPagar() {
-		String categoria = (String) comboCategoria.getSelectedItem();
-		String descricao = campoDescricao.getText();
-		double valor = ((Number) campoValor.getValue()).doubleValue();
-		Date vencimento = (Date) campoVencimento.getValue();
-
-		return new ContaAPagar(categoria, descricao, valor, vencimento);
+		ContaAPagar conta = new ContaAPagar();
+		conta.setCategoria((String) comboCategoria.getSelectedItem());
+		conta.setDescricao(campoDescricao.getText());
+		conta.setValor(((Number) campoValor.getValue()).doubleValue());
+		conta.setVencimento((Date) campoVencimento.getValue());
+		return conta;
 	}
 }

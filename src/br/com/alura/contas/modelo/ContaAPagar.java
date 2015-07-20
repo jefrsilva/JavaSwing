@@ -4,18 +4,11 @@ import java.util.Date;
 
 public class ContaAPagar {
 
+	private Long id;
 	private String categoria;
 	private String descricao;
 	private double valor;
 	private Date vencimento;
-	
-	public ContaAPagar(String categoria, String descricao, double valor,
-			Date vencimento) {
-		this.categoria = categoria;
-		this.descricao = descricao;
-		this.valor = valor;
-		this.vencimento = vencimento;
-	}
 
 	public String getCategoria() {
 		return categoria;
@@ -48,5 +41,13 @@ public class ContaAPagar {
 	public void setVencimento(Date vencimento) {
 		this.vencimento = vencimento;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 }
