@@ -1,9 +1,15 @@
 package br.com.alura.contas;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,8 +26,8 @@ public class ListaContasAPagar extends JFrame {
 	public ListaContasAPagar() {
 		setTitle("Contas a Pagar");
 		setLocationRelativeTo(null);
-		setResizable(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		JPanel painelConteudo = new JPanel();
 		BoxLayout layoutConteudo = new BoxLayout(painelConteudo,
@@ -29,11 +35,34 @@ public class ListaContasAPagar extends JFrame {
 		painelConteudo.setLayout(layoutConteudo);
 
 		JPanel painelLista = criaPainelLista();
+		JPanel painelBotoes = criaPainelBotoes();
 
 		painelConteudo.add(painelLista);
+		painelConteudo.add(painelBotoes);
 		setContentPane(painelConteudo);
 
 		pack();
+	}
+
+	private JPanel criaPainelBotoes() {
+		JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+		painelBotoes.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+		
+		JButton botaoIncluir = new JButton("Incluir");
+		botaoIncluir.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				new FormularioContasAPagar(ListaContasAPagar.this).mostra();
+			}
+		});
+		painelBotoes.add(botaoIncluir);
+		
+		JButton botaoRemover = new JButton("Remover");
+		botaoRemover.setEnabled(false);
+		painelBotoes.add(botaoRemover);
+		return painelBotoes;
 	}
 
 	private JPanel criaPainelLista() {
@@ -49,7 +78,9 @@ public class ListaContasAPagar extends JFrame {
 						bordaComTitulo));
 
 		JTable tabelaContas = criaTabela();
+		tabelaContas.setFillsViewportHeight(true);
 		JScrollPane scrollPane = new JScrollPane(tabelaContas);
+		scrollPane.setPreferredSize(new Dimension(600, 200));
 		painelLista.add(scrollPane);
 
 		return painelLista;

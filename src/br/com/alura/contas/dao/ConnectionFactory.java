@@ -11,8 +11,7 @@ public class ConnectionFactory {
 			return DriverManager.getConnection("jdbc:mysql://localhost/contas",
 					"root", "root");
 		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
+			throw new RuntimeException();
 		}
 	}
 

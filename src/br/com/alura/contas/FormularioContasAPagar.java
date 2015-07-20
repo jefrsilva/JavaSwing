@@ -1,9 +1,10 @@
 package br.com.alura.contas;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,8 +12,8 @@ import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -22,7 +23,8 @@ import javax.swing.text.NumberFormatter;
 import br.com.alura.contas.dao.ContaAPagarDAO;
 import br.com.alura.contas.modelo.ContaAPagar;
 
-public class FormularioContasAPagar extends JFrame {
+public class FormularioContasAPagar extends JDialog {
+	
 	private JComboBox<String> comboCategoria;
 	private JTextField campoDescricao;
 	private JFormattedTextField campoValor;
@@ -30,11 +32,11 @@ public class FormularioContasAPagar extends JFrame {
 	private JButton botaoInserir;
 	private JButton botaoCancelar;
 
-	public FormularioContasAPagar() {
-		setTitle("Formulário de Contas a Pagar");
+	public FormularioContasAPagar(ListaContasAPagar listaContasAPagar) {
+		super(listaContasAPagar, "Formulário de Contas a Pagar", true);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		JPanel painelCampos = criaPainelDeCampos();
 		JPanel painelBotoes = criaPainelDeBotoes();
@@ -59,6 +61,8 @@ public class FormularioContasAPagar extends JFrame {
 				ContaAPagar conta = getContaAPagar();
 				dao.insere(conta);
 				dao.fecha();
+				
+				limpaCampos();
 			}
 		});
 
@@ -66,7 +70,7 @@ public class FormularioContasAPagar extends JFrame {
 		botaoCancelar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Cancelar inserção ou alteração aqui
+				dispose();
 			}
 		});
 
@@ -74,6 +78,13 @@ public class FormularioContasAPagar extends JFrame {
 		painelBotoes.add(botaoCancelar);
 		painelBotoes.add(botaoInserir);
 		return painelBotoes;
+	}
+
+	protected void limpaCampos() {
+		comboCategoria.setSelectedIndex(0);
+		campoDescricao.setText("");
+		campoValor.setValue(0.0);
+		campoVencimento.setValue(Calendar.getInstance().getTime());
 	}
 
 	private JPanel criaPainelDeCampos() {
@@ -96,7 +107,7 @@ public class FormularioContasAPagar extends JFrame {
 		campoValor.setValue(new Double(0.0));
 
 		JLabel rotuloVencimento = new JLabel("Vencimento :");
-		campoVencimento = new JFormattedTextField(DateFormat.getDateInstance());
+		campoVencimento = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
 		campoVencimento.setValue(Calendar.getInstance().getTime());
 
 		grupoCampos.setHorizontalGroup(grupoCampos

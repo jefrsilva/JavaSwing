@@ -64,5 +64,17 @@ public class ContaAPagarDAO {
 		}
 		return contas;
 	}
+	
+	public void remove(ContaAPagar conta) {
+		try {
+			String sql = "delete from contasapagar where id = ?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setLong(1, conta.getId());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
