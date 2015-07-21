@@ -15,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultFormatterFactory;
@@ -24,7 +25,7 @@ import br.com.alura.contas.dao.ContaAPagarDAO;
 import br.com.alura.contas.modelo.ContaAPagar;
 
 public class FormularioContasAPagar extends JDialog {
-	
+
 	private JComboBox<String> comboCategoria;
 	private JTextField campoDescricao;
 	private JFormattedTextField campoValor;
@@ -55,7 +56,7 @@ public class FormularioContasAPagar extends JDialog {
 	public FormularioContasAPagar(ListaContasAPagar listaContasAPagar,
 			ContaAPagar conta) {
 		this(listaContasAPagar);
-		
+
 		comboCategoria.setSelectedItem(conta.getCategoria());
 		campoDescricao.setText(conta.getDescricao());
 		campoValor.setValue(conta.getValor());
@@ -71,8 +72,11 @@ public class FormularioContasAPagar extends JDialog {
 				ContaAPagar conta = getContaAPagar();
 				dao.insere(conta);
 				dao.fecha();
-				
+
 				limpaCampos();
+
+				JOptionPane.showMessageDialog(FormularioContasAPagar.this,
+						"Conta a pagar incluída com sucesso!");
 			}
 		});
 
@@ -117,7 +121,8 @@ public class FormularioContasAPagar extends JDialog {
 		campoValor.setValue(new Double(0.0));
 
 		JLabel rotuloVencimento = new JLabel("Vencimento :");
-		campoVencimento = new JFormattedTextField(new SimpleDateFormat("dd/MM/yyyy"));
+		campoVencimento = new JFormattedTextField(new SimpleDateFormat(
+				"dd/MM/yyyy"));
 		campoVencimento.setValue(Calendar.getInstance().getTime());
 
 		grupoCampos.setHorizontalGroup(grupoCampos

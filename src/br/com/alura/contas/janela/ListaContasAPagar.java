@@ -65,27 +65,28 @@ public class ListaContasAPagar extends JFrame {
 			}
 		});
 		painelBotoes.add(botaoIncluir);
-		
+
 		botaoEditar = new JButton("Editar");
 		botaoEditar.setEnabled(false);
 		botaoEditar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int linhaSelecionada = tabelaContas.getSelectedRow();
 				Long id = (Long) tabelaContas.getValueAt(linhaSelecionada, 0);
-				ContaAPagarDAO contaAPagarDAO  = new ContaAPagarDAO();
+				ContaAPagarDAO contaAPagarDAO = new ContaAPagarDAO();
 				ContaAPagar conta = contaAPagarDAO.busca(id);
 				contaAPagarDAO.fecha();
-				
-				new FormularioContasAPagar(ListaContasAPagar.this, conta).mostra();
+
+				new FormularioContasAPagar(ListaContasAPagar.this, conta)
+						.mostra();
 			}
 		});
 		painelBotoes.add(botaoEditar);
 
 		botaoRemover = new JButton("Remover");
 		botaoRemover.setEnabled(false);
-		botaoRemover.addActionListener(new RemoverContaAPagarListener(
+		botaoRemover.addActionListener(new RemoverContaAPagarListener(this,
 				tabelaContas));
 
 		painelBotoes.add(botaoRemover);
