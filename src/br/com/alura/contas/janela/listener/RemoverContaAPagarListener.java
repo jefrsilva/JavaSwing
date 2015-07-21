@@ -1,4 +1,4 @@
-package br.com.alura.contas.janela;	
+package br.com.alura.contas.janela.listener;	
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

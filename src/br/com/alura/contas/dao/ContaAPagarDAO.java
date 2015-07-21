@@ -50,19 +50,26 @@ public class ContaAPagarDAO {
 			if (temResultados) {
 				ResultSet resultado = stmt.getResultSet();
 				while (resultado.next()) {
-					ContaAPagar conta = new ContaAPagar();
-					conta.setId(resultado.getLong("id"));
-					conta.setCategoria(resultado.getString("categoria"));
-					conta.setDescricao(resultado.getString("descricao"));
-					conta.setValor(resultado.getDouble("valor"));
-					conta.setVencimento(resultado.getDate("vencimento"));
+					ContaAPagar conta = constroiConta(resultado);
 					contas.add(conta);
 				}
+				resultado.close();
 			}
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return contas;
+	}
+
+	private ContaAPagar constroiConta(ResultSet resultado) throws SQLException {
+		ContaAPagar conta = new ContaAPagar();
+		conta.setId(resultado.getLong("id"));
+		conta.setCategoria(resultado.getString("categoria"));
+		conta.setDescricao(resultado.getString("descricao"));
+		conta.setValor(resultado.getDouble("valor"));
+		conta.setVencimento(resultado.getDate("vencimento"));
+		return conta;
 	}
 	
 	public void remove(ContaAPagar conta) {
@@ -75,6 +82,26 @@ public class ContaAPagarDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public ContaAPagar busca(Long id) {
+		ContaAPagar conta = null;
+		try {
+			String sql = "select * from contasapagar where id = ?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setLong(1, id);
+			stmt.execute();
+			ResultSet resultado = stmt.getResultSet();
+			if (resultado != null) {
+				resultado.next();
+				conta = constroiConta(resultado);
+			}
+			resultado.close();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return conta;
 	}
 
 }

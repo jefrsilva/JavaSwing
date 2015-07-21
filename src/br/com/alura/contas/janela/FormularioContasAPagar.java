@@ -52,6 +52,16 @@ public class FormularioContasAPagar extends JDialog {
 		pack();
 	}
 
+	public FormularioContasAPagar(ListaContasAPagar listaContasAPagar,
+			ContaAPagar conta) {
+		this(listaContasAPagar);
+		
+		comboCategoria.setSelectedItem(conta.getCategoria());
+		campoDescricao.setText(conta.getDescricao());
+		campoValor.setValue(conta.getValor());
+		campoVencimento.setValue(conta.getVencimento());
+	}
+
 	private JPanel criaPainelDeBotoes() {
 		botaoInserir = new JButton("Inserir");
 		botaoInserir.addActionListener(new ActionListener() {

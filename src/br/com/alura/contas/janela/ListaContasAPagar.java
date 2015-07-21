@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,10 +22,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import br.com.alura.contas.dao.ContaAPagarDAO;
+import br.com.alura.contas.janela.listener.RemoverContaAPagarListener;
 import br.com.alura.contas.modelo.ContaAPagar;
 
 public class ListaContasAPagar extends JFrame {
 
+	private JButton botaoEditar;
 	private JButton botaoRemover;
 	private JTable tabelaContas;
 
@@ -54,10 +55,10 @@ public class ListaContasAPagar extends JFrame {
 	private JPanel criaPainelBotoes() {
 		JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 		painelBotoes.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-		
+
 		JButton botaoIncluir = new JButton("Incluir");
 		botaoIncluir.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent evento) {
 				new FormularioContasAPagar(ListaContasAPagar.this).mostra();
@@ -65,10 +66,28 @@ public class ListaContasAPagar extends JFrame {
 		});
 		painelBotoes.add(botaoIncluir);
 		
+		botaoEditar = new JButton("Editar");
+		botaoEditar.setEnabled(false);
+		botaoEditar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int linhaSelecionada = tabelaContas.getSelectedRow();
+				Long id = (Long) tabelaContas.getValueAt(linhaSelecionada, 0);
+				ContaAPagarDAO contaAPagarDAO  = new ContaAPagarDAO();
+				ContaAPagar conta = contaAPagarDAO.busca(id);
+				contaAPagarDAO.fecha();
+				
+				new FormularioContasAPagar(ListaContasAPagar.this, conta).mostra();
+			}
+		});
+		painelBotoes.add(botaoEditar);
+
 		botaoRemover = new JButton("Remover");
 		botaoRemover.setEnabled(false);
-		botaoRemover.addActionListener(new RemoverContaAPagarListener(tabelaContas));
-		
+		botaoRemover.addActionListener(new RemoverContaAPagarListener(
+				tabelaContas));
+
 		painelBotoes.add(botaoRemover);
 		return painelBotoes;
 	}
@@ -94,34 +113,42 @@ public class ListaContasAPagar extends JFrame {
 	}
 
 	private JTable criaTabela() {
+		TableModel modelo = criaModeloDaTabela();
+		JTable tabelaContas = new JTable(modelo);
+		tabelaContas.setAutoCreateRowSorter(true);
+		tabelaContas.setFillsViewportHeight(true);
+
+		tabelaContas.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
+
+					@Override
+					public void valueChanged(ListSelectionEvent evento) {
+						int linhasSelecionadas = tabelaContas
+								.getSelectedRowCount();
+						if (linhasSelecionadas > 0) {
+							botaoEditar.setEnabled(true);
+							botaoRemover.setEnabled(true);
+						} else {
+							botaoEditar.setEnabled(false);
+							botaoRemover.setEnabled(false);
+						}
+					}
+				});
+
+		return tabelaContas;
+	}
+
+	private TableModel criaModeloDaTabela() {
 		String[] colunas = { "Id", "Categoria", "Descrição", "Valor",
 				"Vencimento" };
 
-		
 		ContaAPagarDAO contasDAO = new ContaAPagarDAO();
 		List<ContaAPagar> contas = contasDAO.getContas();
 		Object[][] dados = converteContasParaTabela(contas);
 		contasDAO.fecha();
 
 		TableModel modelo = new DefaultTableModel(dados, colunas);
-		JTable tabelaContas = new JTable(modelo);
-		tabelaContas.setAutoCreateRowSorter(true);
-		tabelaContas.setFillsViewportHeight(true);
-		
-		tabelaContas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			
-			@Override
-			public void valueChanged(ListSelectionEvent evento) {
-				int linhasSelecionadas = tabelaContas.getSelectedRowCount();
-				if (linhasSelecionadas > 0) {
-					botaoRemover.setEnabled(true);
-				} else {
-					botaoRemover.setEnabled(false);
-				}
-			}
-		});
-		
-		return tabelaContas;
+		return modelo;
 	}
 
 	private Object[][] converteContasParaTabela(List<ContaAPagar> contas) {
