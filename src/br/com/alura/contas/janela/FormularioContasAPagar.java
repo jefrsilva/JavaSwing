@@ -1,4 +1,4 @@
-package br.com.alura.contas;
+package br.com.alura.contas.janela;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;

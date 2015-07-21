@@ -1,4 +1,4 @@
-package br.com.alura.contas;
+package br.com.alura.contas.janela;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -60,7 +60,6 @@ public class ListaContasAPagar extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent evento) {
-				
 				new FormularioContasAPagar(ListaContasAPagar.this).mostra();
 			}
 		});
@@ -68,25 +67,7 @@ public class ListaContasAPagar extends JFrame {
 		
 		botaoRemover = new JButton("Remover");
 		botaoRemover.setEnabled(false);
-		botaoRemover.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent evento) {
-				int linhaSelecionada = tabelaContas.getSelectedRow();
-				Long id = (Long) tabelaContas.getValueAt(linhaSelecionada, 0);
-				
-				ContaAPagar conta = new ContaAPagar();
-				conta.setId(id);
-				
-				ContaAPagarDAO contasAPagarDAO = new ContaAPagarDAO();
-				contasAPagarDAO.remove(conta);
-				contasAPagarDAO.fecha();
-				
-				DefaultTableModel modelo = (DefaultTableModel) tabelaContas.getModel();
-				modelo.removeRow(linhaSelecionada);
-			}
-		});
-		
+		botaoRemover.addActionListener(new RemoverContaAPagarListener(tabelaContas));
 		
 		painelBotoes.add(botaoRemover);
 		return painelBotoes;
