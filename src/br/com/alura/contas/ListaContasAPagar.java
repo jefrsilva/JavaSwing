@@ -17,11 +17,18 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import br.com.alura.contas.dao.ContaAPagarDAO;
 import br.com.alura.contas.modelo.ContaAPagar;
 
 public class ListaContasAPagar extends JFrame {
+
+	private JButton botaoRemover;
+	private JTable tabelaContas;
 
 	public ListaContasAPagar() {
 		setTitle("Contas a Pagar");
@@ -52,15 +59,35 @@ public class ListaContasAPagar extends JFrame {
 		botaoIncluir.addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent evento) {
 				
 				new FormularioContasAPagar(ListaContasAPagar.this).mostra();
 			}
 		});
 		painelBotoes.add(botaoIncluir);
 		
-		JButton botaoRemover = new JButton("Remover");
+		botaoRemover = new JButton("Remover");
 		botaoRemover.setEnabled(false);
+		botaoRemover.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evento) {
+				int linhaSelecionada = tabelaContas.getSelectedRow();
+				Long id = (Long) tabelaContas.getValueAt(linhaSelecionada, 0);
+				
+				ContaAPagar conta = new ContaAPagar();
+				conta.setId(id);
+				
+				ContaAPagarDAO contasAPagarDAO = new ContaAPagarDAO();
+				contasAPagarDAO.remove(conta);
+				contasAPagarDAO.fecha();
+				
+				DefaultTableModel modelo = (DefaultTableModel) tabelaContas.getModel();
+				modelo.removeRow(linhaSelecionada);
+			}
+		});
+		
+		
 		painelBotoes.add(botaoRemover);
 		return painelBotoes;
 	}
@@ -77,11 +104,10 @@ public class ListaContasAPagar extends JFrame {
 						BorderFactory.createEmptyBorder(10, 10, 10, 10),
 						bordaComTitulo));
 
-		JTable tabelaContas = criaTabela();
-		tabelaContas.setFillsViewportHeight(true);
-		JScrollPane scrollPane = new JScrollPane(tabelaContas);
-		scrollPane.setPreferredSize(new Dimension(600, 200));
-		painelLista.add(scrollPane);
+		tabelaContas = criaTabela();
+		JScrollPane painelComScroll = new JScrollPane(tabelaContas);
+		painelComScroll.setPreferredSize(new Dimension(600, 200));
+		painelLista.add(painelComScroll);
 
 		return painelLista;
 	}
@@ -90,12 +116,30 @@ public class ListaContasAPagar extends JFrame {
 		String[] colunas = { "Id", "Categoria", "Descrição", "Valor",
 				"Vencimento" };
 
+		
 		ContaAPagarDAO contasDAO = new ContaAPagarDAO();
 		List<ContaAPagar> contas = contasDAO.getContas();
 		Object[][] dados = converteContasParaTabela(contas);
 		contasDAO.fecha();
 
-		JTable tabelaContas = new JTable(dados, colunas);
+		TableModel modelo = new DefaultTableModel(dados, colunas);
+		JTable tabelaContas = new JTable(modelo);
+		tabelaContas.setAutoCreateRowSorter(true);
+		tabelaContas.setFillsViewportHeight(true);
+		
+		tabelaContas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent evento) {
+				int linhasSelecionadas = tabelaContas.getSelectedRowCount();
+				if (linhasSelecionadas > 0) {
+					botaoRemover.setEnabled(true);
+				} else {
+					botaoRemover.setEnabled(false);
+				}
+			}
+		});
+		
 		return tabelaContas;
 	}
 
