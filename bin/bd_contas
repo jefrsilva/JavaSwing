@@ -1,0 +1,17 @@
+Roteiro para criação do banco de dados
+
+mysql -u root
+
+CREATE DATABASE contas;
+
+use contas;
+
+create table contasapagar (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    categoria VARCHAR(255),
+    descricao VARCHAR(255),
+    valor DECIMAL(10, 2),
+    vencimento DATE,
+    primary key (id)
+);
+

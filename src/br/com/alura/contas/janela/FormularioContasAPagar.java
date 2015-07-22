@@ -33,9 +33,10 @@ public class FormularioContasAPagar extends JDialog {
 	private JButton botaoInserir;
 	private JButton botaoCancelar;
 
+	private ContaAPagar conta;
+
 	public FormularioContasAPagar(ListaContasAPagar listaContasAPagar) {
 		super(listaContasAPagar, "Formulário de Contas a Pagar", true);
-		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -51,16 +52,19 @@ public class FormularioContasAPagar extends JDialog {
 		setContentPane(painelConteudo);
 
 		pack();
+		setLocationRelativeTo(null);
 	}
 
 	public FormularioContasAPagar(ListaContasAPagar listaContasAPagar,
 			ContaAPagar conta) {
 		this(listaContasAPagar);
 
+		this.conta = conta;
 		comboCategoria.setSelectedItem(conta.getCategoria());
 		campoDescricao.setText(conta.getDescricao());
 		campoValor.setValue(conta.getValor());
 		campoVencimento.setValue(conta.getVencimento());
+		botaoInserir.setText("Alterar");
 	}
 
 	private JPanel criaPainelDeBotoes() {
@@ -68,15 +72,28 @@ public class FormularioContasAPagar extends JDialog {
 		botaoInserir.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ContaAPagarDAO dao = new ContaAPagarDAO();
-				ContaAPagar conta = getContaAPagar();
-				dao.insere(conta);
-				dao.fecha();
+				if (conta == null) {
+					ContaAPagarDAO dao = new ContaAPagarDAO();
+					ContaAPagar conta = pegaContaDoFormulario();
+					dao.insere(conta);
+					dao.fecha();
+					
+					limpaCampos();
 
-				limpaCampos();
-
-				JOptionPane.showMessageDialog(FormularioContasAPagar.this,
-						"Conta a pagar incluída com sucesso!");
+					JOptionPane.showMessageDialog(FormularioContasAPagar.this,
+							"Conta a pagar incluída com sucesso!");
+				} else {
+					ContaAPagarDAO dao = new ContaAPagarDAO();
+					ContaAPagar contaAlterada = pegaContaDoFormulario();
+					contaAlterada.setId(conta.getId());
+					dao.altera(contaAlterada);
+					dao.fecha();
+					
+					JOptionPane.showMessageDialog(FormularioContasAPagar.this,
+							"Conta a pagar alterada com sucesso!");
+					FormularioContasAPagar.this.dispose();
+				}
+					
 			}
 		});
 
@@ -180,12 +197,16 @@ public class FormularioContasAPagar extends JDialog {
 		setVisible(true);
 	}
 
-	public ContaAPagar getContaAPagar() {
+	private ContaAPagar pegaContaDoFormulario() {
 		ContaAPagar conta = new ContaAPagar();
 		conta.setCategoria((String) comboCategoria.getSelectedItem());
 		conta.setDescricao(campoDescricao.getText());
 		conta.setValor(((Number) campoValor.getValue()).doubleValue());
 		conta.setVencimento((Date) campoVencimento.getValue());
+		return conta;
+	}
+	
+	public ContaAPagar getContaAPagar() {
 		return conta;
 	}
 }

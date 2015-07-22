@@ -33,7 +33,6 @@ public class ListaContasAPagar extends JFrame {
 
 	public ListaContasAPagar() {
 		setTitle("Contas a Pagar");
-		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -50,6 +49,7 @@ public class ListaContasAPagar extends JFrame {
 		setContentPane(painelConteudo);
 
 		pack();
+		setLocationRelativeTo(null);
 	}
 
 	private JPanel criaPainelBotoes() {
@@ -61,7 +61,10 @@ public class ListaContasAPagar extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent evento) {
-				new FormularioContasAPagar(ListaContasAPagar.this).mostra();
+				FormularioContasAPagar form = new FormularioContasAPagar(
+						ListaContasAPagar.this);
+				form.mostra();
+				ContaAPagar conta = form.getContaAPagar();
 			}
 		});
 		painelBotoes.add(botaoIncluir);

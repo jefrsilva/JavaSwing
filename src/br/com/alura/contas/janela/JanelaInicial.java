@@ -15,7 +15,6 @@ public class JanelaInicial extends JFrame {
 	public JanelaInicial() {
 		super("Controle de Contas a Pagar e a Receber");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
 
 		JPanel painelConteudo = new JPanel();
 		painelConteudo.setLayout(new BoxLayout(painelConteudo,
@@ -34,6 +33,7 @@ public class JanelaInicial extends JFrame {
 
 		setContentPane(painelConteudo);
 		pack();
+		setLocationRelativeTo(null);
 	}
 
 	public static void main(String[] args) {

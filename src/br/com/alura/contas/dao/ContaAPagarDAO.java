@@ -104,4 +104,20 @@ public class ContaAPagarDAO {
 		return conta;
 	}
 
+	public void altera(ContaAPagar conta) {
+		try {
+			String sql = "update contasapagar SET categoria=?, descricao=?, valor=?, vencimento=?"
+					+ " WHERE id=?";
+			PreparedStatement stmt = connection.prepareStatement(sql);
+			stmt.setString(1, conta.getCategoria());
+			stmt.setString(2, conta.getDescricao());
+			stmt.setDouble(3, conta.getValor());
+			stmt.setDate(4, new java.sql.Date(conta.getVencimento().getTime()));
+			stmt.setLong(5, conta.getId());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
