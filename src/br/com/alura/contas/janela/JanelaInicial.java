@@ -26,8 +26,7 @@ public class JanelaInicial extends JFrame {
 		botaoListaContasAPagar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				new ListaContasAPagar().mostra();
+				new ListaContasAPagar(JanelaInicial.this).mostra();
 			}
 		});
 

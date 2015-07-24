@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,14 +25,14 @@ import br.com.alura.contas.dao.ContaAPagarDAO;
 import br.com.alura.contas.janela.listener.RemoverContaAPagarListener;
 import br.com.alura.contas.modelo.ContaAPagar;
 
-public class ListaContasAPagar extends JFrame {
+public class ListaContasAPagar extends JDialog {
 
 	private JButton botaoEditar;
 	private JButton botaoRemover;
 	private JTable tabelaContas;
 
-	public ListaContasAPagar() {
-		setTitle("Contas a Pagar");
+	public ListaContasAPagar(JanelaInicial janelaInicial) {
+		super(janelaInicial, "Contas a Pagar", true);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

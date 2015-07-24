@@ -3,6 +3,7 @@ package br.com.alura.contas.janela.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -13,18 +14,18 @@ import br.com.alura.contas.modelo.ContaAPagar;
 
 public class RemoverContaAPagarListener implements ActionListener {
 
-	private JFrame frame;
+	private JDialog dialog;
 	private JTable tabelaContas;
 
-	public RemoverContaAPagarListener(JFrame frame, JTable tabelaContas) {
+	public RemoverContaAPagarListener(JDialog dialog, JTable tabelaContas) {
 		super();
-		this.frame = frame;
+		this.dialog = dialog;
 		this.tabelaContas = tabelaContas;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int resposta = JOptionPane.showConfirmDialog(frame,
+		int resposta = JOptionPane.showConfirmDialog(dialog,
 				"Deseja mesmo remover esta conta a pagar?",
 				"Confirmar exclusão", JOptionPane.YES_NO_OPTION);
 
