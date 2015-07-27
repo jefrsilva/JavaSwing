@@ -1,4 +1,4 @@
-package br.com.alura.contas.janela;
+package br.com.alura.contas.formulario;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

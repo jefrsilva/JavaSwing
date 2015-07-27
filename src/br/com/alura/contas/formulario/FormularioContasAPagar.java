@@ -1,4 +1,4 @@
-package br.com.alura.contas.janela;
+package br.com.alura.contas.formulario;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -15,13 +15,12 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
-import br.com.alura.contas.dao.ContaAPagarDAO;
+import br.com.alura.contas.formulario.listener.InsereOuAlteraContaAPagarListener;
 import br.com.alura.contas.modelo.ContaAPagar;
 
 public class FormularioContasAPagar extends JDialog {
@@ -30,7 +29,7 @@ public class FormularioContasAPagar extends JDialog {
 	private JTextField campoDescricao;
 	private JFormattedTextField campoValor;
 	private JFormattedTextField campoVencimento;
-	private JButton botaoInserir;
+	private JButton botaoInserirOuAlterar;
 	private JButton botaoCancelar;
 
 	private ContaAPagar conta;
@@ -64,38 +63,17 @@ public class FormularioContasAPagar extends JDialog {
 		campoDescricao.setText(conta.getDescricao());
 		campoValor.setValue(conta.getValor());
 		campoVencimento.setValue(conta.getVencimento());
-		botaoInserir.setText("Alterar");
+
+		botaoInserirOuAlterar.setText("Alterar");
+		botaoInserirOuAlterar.setActionCommand("Alterar");
+
 	}
 
 	private JPanel criaPainelDeBotoes() {
-		botaoInserir = new JButton("Inserir");
-		botaoInserir.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (conta == null) {
-					ContaAPagarDAO dao = new ContaAPagarDAO();
-					ContaAPagar conta = pegaContaDoFormulario();
-					dao.insere(conta);
-					dao.fecha();
-					
-					limpaCampos();
-
-					JOptionPane.showMessageDialog(FormularioContasAPagar.this,
-							"Conta a pagar incluída com sucesso!");
-				} else {
-					ContaAPagarDAO dao = new ContaAPagarDAO();
-					ContaAPagar contaAlterada = pegaContaDoFormulario();
-					contaAlterada.setId(conta.getId());
-					dao.altera(contaAlterada);
-					dao.fecha();
-					
-					JOptionPane.showMessageDialog(FormularioContasAPagar.this,
-							"Conta a pagar alterada com sucesso!");
-					FormularioContasAPagar.this.dispose();
-				}
-					
-			}
-		});
+		botaoInserirOuAlterar = new JButton("Inserir");
+		botaoInserirOuAlterar
+				.addActionListener(new InsereOuAlteraContaAPagarListener(this));
+		botaoInserirOuAlterar.setActionCommand("Inserir");
 
 		botaoCancelar = new JButton("Cancelar");
 		botaoCancelar.addActionListener(new ActionListener() {
@@ -107,15 +85,16 @@ public class FormularioContasAPagar extends JDialog {
 
 		JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 		painelBotoes.add(botaoCancelar);
-		painelBotoes.add(botaoInserir);
+		painelBotoes.add(botaoInserirOuAlterar);
 		return painelBotoes;
 	}
 
-	protected void limpaCampos() {
+	public void limpaCampos() {
 		comboCategoria.setSelectedIndex(0);
 		campoDescricao.setText("");
 		campoValor.setValue(0.0);
 		campoVencimento.setValue(Calendar.getInstance().getTime());
+		conta = null;
 	}
 
 	private JPanel criaPainelDeCampos() {
@@ -197,15 +176,17 @@ public class FormularioContasAPagar extends JDialog {
 		setVisible(true);
 	}
 
-	private ContaAPagar pegaContaDoFormulario() {
-		ContaAPagar conta = new ContaAPagar();
+	public ContaAPagar pegaContaDoFormulario() {
+		if (conta == null) {
+			conta = new ContaAPagar();
+		}
 		conta.setCategoria((String) comboCategoria.getSelectedItem());
 		conta.setDescricao(campoDescricao.getText());
 		conta.setValor(((Number) campoValor.getValue()).doubleValue());
 		conta.setVencimento((Date) campoVencimento.getValue());
 		return conta;
 	}
-	
+
 	public ContaAPagar getContaAPagar() {
 		return conta;
 	}

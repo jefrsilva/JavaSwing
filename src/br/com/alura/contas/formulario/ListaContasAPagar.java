@@ -1,9 +1,10 @@
-package br.com.alura.contas.janela;
+package br.com.alura.contas.formulario;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -22,7 +23,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import br.com.alura.contas.dao.ContaAPagarDAO;
-import br.com.alura.contas.janela.listener.RemoverContaAPagarListener;
+import br.com.alura.contas.formulario.cellrenderer.DataCellRenderer;
+import br.com.alura.contas.formulario.cellrenderer.ValorCellRenderer;
+import br.com.alura.contas.formulario.listener.RemoveContaAPagarListener;
+import br.com.alura.contas.formulario.tablemodel.ContasAPagarTableModel;
 import br.com.alura.contas.modelo.ContaAPagar;
 
 public class ListaContasAPagar extends JDialog {
@@ -61,10 +65,9 @@ public class ListaContasAPagar extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent evento) {
-				FormularioContasAPagar form = new FormularioContasAPagar(
-						ListaContasAPagar.this);
-				form.mostra();
-				ContaAPagar conta = form.getContaAPagar();
+				new FormularioContasAPagar(ListaContasAPagar.this).mostra();
+
+				carregaLista();
 			}
 		});
 		painelBotoes.add(botaoIncluir);
@@ -83,14 +86,15 @@ public class ListaContasAPagar extends JDialog {
 
 				new FormularioContasAPagar(ListaContasAPagar.this, conta)
 						.mostra();
+
+				carregaLista();
 			}
 		});
 		painelBotoes.add(botaoEditar);
 
 		botaoRemover = new JButton("Remover");
 		botaoRemover.setEnabled(false);
-		botaoRemover.addActionListener(new RemoverContaAPagarListener(this,
-				tabelaContas));
+		botaoRemover.addActionListener(new RemoveContaAPagarListener(this));
 
 		painelBotoes.add(botaoRemover);
 		return painelBotoes;
@@ -121,6 +125,8 @@ public class ListaContasAPagar extends JDialog {
 		JTable tabelaContas = new JTable(modelo);
 		tabelaContas.setAutoCreateRowSorter(true);
 		tabelaContas.setFillsViewportHeight(true);
+		tabelaContas.setDefaultRenderer(Double.class, new ValorCellRenderer());
+		tabelaContas.setDefaultRenderer(Date.class, new DataCellRenderer());
 
 		tabelaContas.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
@@ -143,34 +149,26 @@ public class ListaContasAPagar extends JDialog {
 	}
 
 	private TableModel criaModeloDaTabela() {
-		String[] colunas = { "Id", "Categoria", "Descrição", "Valor",
-				"Vencimento" };
-
 		ContaAPagarDAO contasDAO = new ContaAPagarDAO();
 		List<ContaAPagar> contas = contasDAO.getContas();
-		Object[][] dados = converteContasParaTabela(contas);
 		contasDAO.fecha();
 
-		TableModel modelo = new DefaultTableModel(dados, colunas);
+		TableModel modelo = new ContasAPagarTableModel(contas);
 		return modelo;
-	}
-
-	private Object[][] converteContasParaTabela(List<ContaAPagar> contas) {
-		Object[][] dados = new Object[contas.size()][];
-		for (int i = 0; i < contas.size(); i++) {
-			ContaAPagar conta = contas.get(i);
-			Object[] dadosDaConta = new Object[5];
-			dadosDaConta[0] = conta.getId();
-			dadosDaConta[1] = conta.getCategoria();
-			dadosDaConta[2] = conta.getDescricao();
-			dadosDaConta[3] = conta.getValor();
-			dadosDaConta[4] = conta.getVencimento();
-			dados[i] = dadosDaConta;
-		}
-		return dados;
 	}
 
 	public void mostra() {
 		setVisible(true);
+	}
+
+	public void carregaLista() {
+		TableModel modelo = criaModeloDaTabela();
+		tabelaContas.setModel(modelo);
+	}
+
+	public Long getIdContaSelecionada() {
+		int linhaSelecionada = tabelaContas.getSelectedRow();
+		TableModel modelo = tabelaContas.getModel();
+		return (Long) modelo.getValueAt(linhaSelecionada, ContasAPagarTableModel.ID);
 	}
 }
