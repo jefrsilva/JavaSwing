@@ -21,7 +21,7 @@ public class InsereOuAlteraContaAPagarListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Inserir")) {
 			insere();
-		} else {
+		} else if (e.getActionCommand().equals("Alterar")){
 			altera();
 		}
 	}

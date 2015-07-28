@@ -14,12 +14,12 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import br.com.alura.contas.dao.ContaAPagarDAO;
@@ -78,8 +78,7 @@ public class ListaContasAPagar extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int linhaSelecionada = tabelaContas.getSelectedRow();
-				Long id = (Long) tabelaContas.getValueAt(linhaSelecionada, 0);
+				Long id = getIdContaSelecionada();
 				ContaAPagarDAO contaAPagarDAO = new ContaAPagarDAO();
 				ContaAPagar conta = contaAPagarDAO.busca(id);
 				contaAPagarDAO.fecha();
@@ -123,6 +122,7 @@ public class ListaContasAPagar extends JDialog {
 	private JTable criaTabela() {
 		TableModel modelo = criaModeloDaTabela();
 		JTable tabelaContas = new JTable(modelo);
+		tabelaContas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabelaContas.setAutoCreateRowSorter(true);
 		tabelaContas.setFillsViewportHeight(true);
 		tabelaContas.setDefaultRenderer(Double.class, new ValorCellRenderer());
@@ -169,6 +169,7 @@ public class ListaContasAPagar extends JDialog {
 	public Long getIdContaSelecionada() {
 		int linhaSelecionada = tabelaContas.getSelectedRow();
 		TableModel modelo = tabelaContas.getModel();
-		return (Long) modelo.getValueAt(linhaSelecionada, ContasAPagarTableModel.ID);
+		return (Long) modelo.getValueAt(linhaSelecionada,
+				ContasAPagarTableModel.ID);
 	}
 }
