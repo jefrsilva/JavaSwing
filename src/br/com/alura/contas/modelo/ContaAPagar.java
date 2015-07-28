@@ -9,6 +9,7 @@ public class ContaAPagar {
 	private String descricao;
 	private double valor;
 	private Date vencimento;
+	private Date pagamento;
 
 	public String getCategoria() {
 		return categoria;
@@ -48,6 +49,14 @@ public class ContaAPagar {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Date getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Date pagamento) {
+		this.pagamento = pagamento;
 	}
 
 }

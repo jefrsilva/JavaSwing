@@ -1,9 +1,11 @@
 package br.com.alura.contas.formulario;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +33,10 @@ import br.com.alura.contas.modelo.ContaAPagar;
 
 public class ListaContasAPagar extends JDialog {
 
+	private JTable tabelaContas;
 	private JButton botaoEditar;
 	private JButton botaoRemover;
-	private JTable tabelaContas;
+	private JButton botaoBaixa;
 
 	public ListaContasAPagar(JanelaInicial janelaInicial) {
 		super(janelaInicial, "Contas a Pagar", true);
@@ -94,8 +97,25 @@ public class ListaContasAPagar extends JDialog {
 		botaoRemover = new JButton("Remover");
 		botaoRemover.setEnabled(false);
 		botaoRemover.addActionListener(new RemoveContaAPagarListener(this));
-
 		painelBotoes.add(botaoRemover);
+		
+		botaoBaixa = new JButton("Dar baixa");
+		botaoBaixa.setEnabled(false);
+		botaoBaixa.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Long id = getIdContaSelecionada();
+				ContaAPagarDAO contaAPagarDAO = new ContaAPagarDAO();
+				ContaAPagar conta = contaAPagarDAO.busca(id);
+				conta.setPagamento(Calendar.getInstance().getTime());
+				contaAPagarDAO.altera(conta);
+				contaAPagarDAO.fecha();
+				
+				carregaLista();
+			}
+		});
+		painelBotoes.add(botaoBaixa);
 		return painelBotoes;
 	}
 
@@ -133,24 +153,38 @@ public class ListaContasAPagar extends JDialog {
 
 					@Override
 					public void valueChanged(ListSelectionEvent evento) {
-						int linhasSelecionadas = tabelaContas
-								.getSelectedRowCount();
-						if (linhasSelecionadas > 0) {
-							botaoEditar.setEnabled(true);
-							botaoRemover.setEnabled(true);
+						if (temContaSelecionada()) {
+							ativaBotoesDeEdicao();
 						} else {
-							botaoEditar.setEnabled(false);
-							botaoRemover.setEnabled(false);
+							desativaBotoesDeEdicao();
 						}
 					}
 				});
 
 		return tabelaContas;
 	}
+	
+	private void ativaBotoesDeEdicao() {
+		defineEstadoDosBotoesDeEdicao(true);
+	}
+
+	private void desativaBotoesDeEdicao() {
+		defineEstadoDosBotoesDeEdicao(false);
+	}
+
+	private void defineEstadoDosBotoesDeEdicao(boolean estado) {
+		botaoEditar.setEnabled(estado);
+		botaoRemover.setEnabled(estado);
+		botaoBaixa.setEnabled(estado);
+	}
+	
+	private boolean temContaSelecionada() {
+		return tabelaContas.getSelectedRowCount() > 0;
+	}
 
 	private TableModel criaModeloDaTabela() {
 		ContaAPagarDAO contasDAO = new ContaAPagarDAO();
-		List<ContaAPagar> contas = contasDAO.getContas();
+		List<ContaAPagar> contas = contasDAO.getContasAPagar();
 		contasDAO.fecha();
 
 		TableModel modelo = new ContasAPagarTableModel(contas);
