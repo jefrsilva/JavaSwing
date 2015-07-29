@@ -120,7 +120,11 @@ public class ContaAPagarDAO {
 			stmt.setString(2, conta.getDescricao());
 			stmt.setDouble(3, conta.getValor());
 			stmt.setDate(4, new java.sql.Date(conta.getVencimento().getTime()));
-			stmt.setDate(5, new java.sql.Date(conta.getPagamento().getTime()));
+			if (conta.getPagamento() != null) {
+				stmt.setDate(5, new java.sql.Date(conta.getPagamento().getTime()));
+			} else {
+				stmt.setDate(5, null);
+			}
 			stmt.setLong(6, conta.getId());
 			stmt.execute();
 			stmt.close();

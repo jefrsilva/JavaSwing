@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -64,6 +65,7 @@ public class ListaContasAPagar extends JDialog {
 		painelBotoes.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
 		JButton botaoIncluir = new JButton("Incluir");
+		botaoIncluir.setMnemonic(KeyEvent.VK_I);
 		botaoIncluir.addActionListener(new ActionListener() {
 
 			@Override
@@ -76,6 +78,7 @@ public class ListaContasAPagar extends JDialog {
 		painelBotoes.add(botaoIncluir);
 
 		botaoEditar = new JButton("Editar");
+		botaoEditar.setMnemonic(KeyEvent.VK_E);
 		botaoEditar.setEnabled(false);
 		botaoEditar.addActionListener(new ActionListener() {
 
@@ -95,11 +98,13 @@ public class ListaContasAPagar extends JDialog {
 		painelBotoes.add(botaoEditar);
 
 		botaoRemover = new JButton("Remover");
+		botaoRemover.setMnemonic(KeyEvent.VK_R);
 		botaoRemover.setEnabled(false);
 		botaoRemover.addActionListener(new RemoveContaAPagarListener(this));
 		painelBotoes.add(botaoRemover);
 		
 		botaoBaixa = new JButton("Dar baixa");
+		botaoBaixa.setMnemonic(KeyEvent.VK_B);
 		botaoBaixa.setEnabled(false);
 		botaoBaixa.addActionListener(new ActionListener() {
 			

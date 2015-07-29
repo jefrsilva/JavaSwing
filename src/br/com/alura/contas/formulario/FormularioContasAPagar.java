@@ -3,6 +3,7 @@ package br.com.alura.contas.formulario;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -49,6 +50,7 @@ public class FormularioContasAPagar extends JDialog {
 		painelConteudo.add(painelCampos);
 		painelConteudo.add(painelBotoes);
 		setContentPane(painelConteudo);
+		painelConteudo.getRootPane().setDefaultButton(botaoInserirOuAlterar);
 
 		pack();
 		setLocationRelativeTo(null);
@@ -66,7 +68,7 @@ public class FormularioContasAPagar extends JDialog {
 
 		botaoInserirOuAlterar.setText("Alterar");
 		botaoInserirOuAlterar.setActionCommand("Alterar");
-
+		botaoInserirOuAlterar.setMnemonic(KeyEvent.VK_A);
 	}
 
 	private JPanel criaPainelDeBotoes() {
@@ -74,8 +76,10 @@ public class FormularioContasAPagar extends JDialog {
 		botaoInserirOuAlterar
 				.addActionListener(new InsereOuAlteraContaAPagarListener(this));
 		botaoInserirOuAlterar.setActionCommand("Inserir");
+		botaoInserirOuAlterar.setMnemonic(KeyEvent.VK_I);
 
 		botaoCancelar = new JButton("Cancelar");
+		botaoCancelar.setMnemonic(KeyEvent.VK_C);
 		botaoCancelar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
