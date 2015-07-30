@@ -13,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
@@ -35,7 +36,7 @@ public class JanelaInicial extends JFrame {
 				BoxLayout.PAGE_AXIS));
 		
 		JMenuBar barraDeMenu = criaMenu();
-		this.setJMenuBar(barraDeMenu);
+		setJMenuBar(barraDeMenu);
 
 		JPanel painelContasAPagar = criaPainelContasAPagar();
 		painelConteudo.add(painelContasAPagar);
@@ -93,15 +94,18 @@ public class JanelaInicial extends JFrame {
 		listaContasAPagar = new JList<>();
 		listaContasAPagar.setLayoutOrientation(JList.VERTICAL);
 		listaContasAPagar.setCellRenderer(new ContasAPagarListCellRenderer());
-		painelContasAPagar.add(listaContasAPagar);
+		listaContasAPagar.setVisibleRowCount(3);
 
 		carregaLista();
+		
+		JScrollPane scrollLista = new JScrollPane(listaContasAPagar);
+		painelContasAPagar.add(scrollLista);
 		return painelContasAPagar;
 	}
 
 	private void carregaLista() {
 		ContaAPagarDAO dao = new ContaAPagarDAO();
-		List<ContaAPagar> contas = dao.getContasAPagar();
+		List<ContaAPagar> contas = dao.getContas();
 		dao.fecha();
 
 		ContaAPagar[] contasArray = contas.toArray(new ContaAPagar[0]);
