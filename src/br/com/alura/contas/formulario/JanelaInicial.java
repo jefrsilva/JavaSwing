@@ -24,6 +24,8 @@ import br.com.alura.contas.modelo.ContaAPagar;
 
 public class JanelaInicial extends JFrame {
 
+	private JList<ContaAPagar> listaContasAPagar;
+
 	public JanelaInicial() {
 		super("Controle de Contas a Pagar e a Receber");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -57,6 +59,7 @@ public class JanelaInicial extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new ListaContasAPagar(JanelaInicial.this).mostra();
+				carregaLista();
 			}
 		});
 		
@@ -87,18 +90,23 @@ public class JanelaInicial extends JFrame {
 						BorderFactory.createEmptyBorder(10, 10, 10, 10),
 						bordaComTitulo));
 
+		listaContasAPagar = new JList<>();
+		listaContasAPagar.setLayoutOrientation(JList.VERTICAL);
+		listaContasAPagar.setCellRenderer(new ContasAPagarListCellRenderer());
+		painelContasAPagar.add(listaContasAPagar);
+
+		carregaLista();
+		return painelContasAPagar;
+	}
+
+	private void carregaLista() {
 		ContaAPagarDAO dao = new ContaAPagarDAO();
 		List<ContaAPagar> contas = dao.getContasAPagar();
 		dao.fecha();
 
-		JList<ContaAPagar> listaContasAPagar = new JList<>();
-		
 		ContaAPagar[] contasArray = contas.toArray(new ContaAPagar[0]);
+		
 		listaContasAPagar.setListData(contasArray);
-		listaContasAPagar.setLayoutOrientation(JList.VERTICAL);
-		listaContasAPagar.setCellRenderer(new ContasAPagarListCellRenderer());
-		painelContasAPagar.add(listaContasAPagar);
-		return painelContasAPagar;
 	}
 
 	public static void main(String[] args) {
