@@ -1,4 +1,4 @@
-package br.com.alura.contas.formulario.tablemodel;
+package br.com.alura.contas.formulario.model.table;
 
 import java.util.Date;
 import java.util.List;

@@ -26,10 +26,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 import br.com.alura.contas.dao.ContaAPagarDAO;
-import br.com.alura.contas.formulario.cellrenderer.DataCellRenderer;
-import br.com.alura.contas.formulario.cellrenderer.ValorCellRenderer;
+import br.com.alura.contas.formulario.cellrenderer.table.DataCellRenderer;
+import br.com.alura.contas.formulario.cellrenderer.table.ValorCellRenderer;
 import br.com.alura.contas.formulario.listener.RemoveContaAPagarListener;
-import br.com.alura.contas.formulario.tablemodel.ContasAPagarTableModel;
+import br.com.alura.contas.formulario.model.table.ContasAPagarTableModel;
 import br.com.alura.contas.modelo.ContaAPagar;
 
 public class ListaContasAPagar extends JDialog {

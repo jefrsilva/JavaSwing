@@ -1,4 +1,4 @@
-package br.com.alura.contas.formulario.cellrenderer;
+package br.com.alura.contas.formulario.cellrenderer.table;
 
 import java.awt.Component;
 import java.text.Format;

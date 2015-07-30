@@ -1,5 +1,6 @@
 package br.com.alura.contas.modelo;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class ContaAPagar {
@@ -57,6 +58,11 @@ public class ContaAPagar {
 
 	public void setPagamento(Date pagamento) {
 		this.pagamento = pagamento;
+	}
+
+	public boolean estaVencida() {
+		Date dataDeHoje = Calendar.getInstance().getTime();
+		return vencimento.before(dataDeHoje);
 	}
 
 }
